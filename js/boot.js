@@ -157,7 +157,13 @@ function handleSignup(e) {
 
   emailCode = gen6();
   document.getElementById('emailVerifyTarget').textContent = email;
-  document.getElementById('emailCodeHint').textContent = 'Demo code: ' + emailCode;
+  const eHint = document.getElementById('emailCodeHint');
+  if (typeof emailjsConfigured === 'function' && emailjsConfigured()) {
+    eHint.textContent = 'Sending a code to ' + email + '…';
+    sendEmailCode(email, emailCode).then(ok => { eHint.textContent = ok ? '📧 Code sent — check your email (and spam folder).' : 'Email send failed · Demo code: ' + emailCode; });
+  } else {
+    eHint.textContent = 'Demo code: ' + emailCode;
+  }
   document.getElementById('emailCodeInput').value = '';
   document.getElementById('emailVerifyError').textContent = '';
   gotoScreen('signupScreen', 'emailVerifyScreen');

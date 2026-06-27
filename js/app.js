@@ -3605,7 +3605,11 @@ function submitConnect(e) {
 
 /* ===== SPOTIFY ===== */
 function spotifyLinked() { const a = getAccount(); return a.spotify && a.spotify.linked; }
-function linkSpotifyInApp() { openConnect('spotify'); }
+function linkSpotifyInApp() {
+  // real Spotify OAuth when a Client ID is configured; otherwise the on-device demo sheet
+  if (typeof spotifyConfigured === 'function' && spotifyConfigured()) { spotifyLogin(); return; }
+  openConnect('spotify');
+}
 function confirmUnlinkSpotify() {
   showConfirm('Disconnect Spotify?', 'You can reconnect any time from Settings.', 'Disconnect', () => {
     const a = getAccount(); delete a.spotify; saveAccount(a); toast('Spotify disconnected'); renderSettings();

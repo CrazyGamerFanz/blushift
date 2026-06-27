@@ -1,5 +1,5 @@
 /* BLUSHIFT service worker — offline app shell so it installs & runs like a native app */
-const CACHE = 'blushift-beta-v3';
+const CACHE = 'blushift-beta-v4';
 const ASSETS = [
   './',
   './index.html',
@@ -9,9 +9,11 @@ const ASSETS = [
   './css/themes.css',
   './css/app.css',
   './css/animations.css',
+  './js/config.js',
   './js/data.js',
   './js/boot.js',
   './js/app.js',
+  './js/auth.js',
   './js/pwa.js',
   './icons/icon-192.png',
   './icons/icon-512.png',
