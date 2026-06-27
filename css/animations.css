@@ -396,7 +396,7 @@
 .msg-row.swiping .swipe-hint {
   opacity: 1;
   left: -38px;
-  transform: translateY(-50%) scale(2.5);   /* reply icon grows ~2.5x as you drag it out */
+  transform: translateY(-50%) scale(1.5);   /* reply icon grows ~1.5x as you drag it out (3/5 of prior 2.5x) */
 }
 
 /* Generic animations */

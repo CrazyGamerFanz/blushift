@@ -881,11 +881,13 @@ html, body {
   padding: 24px 20px 16px;
 }
 .cp-avatar {
-  width: 72px; height: 72px;
+  width: 124px; height: 124px;
   border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
   font-family: 'Orbitron', sans-serif;
-  font-weight: 700; font-size: 22px;
+  font-weight: 700; font-size: 38px;
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+  box-shadow: 0 0 0 4px rgba(255,255,255,0.06), 0 10px 30px rgba(0,0,0,0.45);
 }
 .cp-name {
   font-family: 'Orbitron', sans-serif;
@@ -2490,6 +2492,13 @@ body.stealth .messages:hover, body.stealth .cl-item:hover .cl-preview, body.hide
 .voice-recorder.recording .vr-mic { background: var(--danger); border-color: var(--danger); color: #fff; animation: pulse 1s infinite; }
 .vr-send { max-width: 240px; margin-top: 6px; display: none; }
 .voice-recorder.has-rec .vr-send { display: block; }
+
+/* Sync contacts from phone button */
+.sync-contacts-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0 14px 6px; width: calc(100% - 28px); }
+
+/* End-to-end encryption banner in chats */
+.e2e-banner { display: flex; align-items: center; justify-content: center; gap: 6px; margin: 6px auto 10px; padding: 5px 12px; max-width: 320px; font-size: 10.5px; color: var(--txt-dim); background: rgba(80,200,120,0.10); border: 1px solid rgba(80,200,120,0.22); border-radius: 20px; text-align: center; }
+.e2e-banner svg { color: #3ddc84; flex: 0 0 auto; }
 
 /* Spline lasso sticker cutout */
 .spline-body { padding: 14px 16px 18px; }
