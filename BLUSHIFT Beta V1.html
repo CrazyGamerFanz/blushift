@@ -371,8 +371,25 @@
     <div class="location-header"><span>STICKERS</span><button onclick="closeStickerPicker()">✕</button></div>
     <div class="sticker-tabs" id="stickerTabs"></div>
     <div class="sticker-grid" id="stickerGrid"></div>
-    <button class="btn-secondary" onclick="createSticker()" style="margin:10px 16px">＋ Create Sticker (AI cutout)</button>
-    <div class="sticker-processing hidden" id="stickerProcessing"><span class="sp-spin"></span> ✨ AI removing background…</div>
+    <button class="btn-secondary" onclick="createSticker()" style="margin:10px 16px">＋ Create Sticker (cut out a shape)</button>
+    <div class="sticker-processing hidden" id="stickerProcessing"><span class="sp-spin"></span> ✨ Processing…</div>
+  </div>
+</div>
+
+<!-- Spline lasso sticker cutout -->
+<div class="modal-overlay" id="splineModal">
+  <div class="tapback-backdrop" onclick="closeSplineCutout()"></div>
+  <div class="add-contact-modal">
+    <div class="location-header"><span>CUT OUT STICKER</span><button onclick="closeSplineCutout()">✕</button></div>
+    <div class="spline-body">
+      <div class="spline-hint" id="splineHint">Tap around the part to keep</div>
+      <div class="spline-canvas-wrap"><canvas id="splineCanvas" onpointerdown="splineAddPoint(event)"></canvas></div>
+      <div class="spline-actions">
+        <button class="btn-secondary" onclick="undoSplinePoint()">↶ Undo</button>
+        <button class="btn-secondary" onclick="resetSpline()">Reset</button>
+        <button class="btn-primary" onclick="applySplineCutout()">✂️ Cut Out</button>
+      </div>
+    </div>
   </div>
 </div>
 

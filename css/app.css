@@ -2491,6 +2491,14 @@ body.stealth .messages:hover, body.stealth .cl-item:hover .cl-preview, body.hide
 .vr-send { max-width: 240px; margin-top: 6px; display: none; }
 .voice-recorder.has-rec .vr-send { display: block; }
 
+/* Spline lasso sticker cutout */
+.spline-body { padding: 14px 16px 18px; }
+.spline-hint { font-size: 12.5px; color: var(--txt-dim); text-align: center; margin-bottom: 10px; min-height: 16px; }
+.spline-canvas-wrap { display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.28); border: 1px solid var(--line); border-radius: 12px; padding: 8px; min-height: 120px; }
+#splineCanvas { touch-action: none; cursor: crosshair; border-radius: 8px; max-width: 100%; display: block; }
+.spline-actions { display: flex; gap: 8px; margin-top: 14px; }
+.spline-actions .btn-secondary, .spline-actions .btn-primary { flex: 1; max-width: none; }
+
 /* Language select screen + rows */
 .lang-screen { position: fixed; inset: 0; z-index: 50; display: flex; align-items: center; justify-content: center; background: var(--bg-0); }
 .lang-screen.hidden { display: none; }

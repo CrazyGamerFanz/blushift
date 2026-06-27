@@ -913,17 +913,7 @@ function handleStickerUpload(input) {
   const f = (input.files || [])[0];
   if (!f) return;
   const reader = new FileReader();
-  reader.onload = e => {
-    showStickerProcessing();
-    // let the overlay paint before the heavy canvas work
-    setTimeout(() => removeBackground(e.target.result, out => {
-      const custom = STICKER_PACKS.find(p => p.id === 'custom');
-      custom.stickers.push({ img: out });
-      renderStickerTabs();
-      selectStickerPack('custom', null);
-      hideStickerProcessing();
-    }), 60);
-  };
+  reader.onload = e => openSplineCutout(e.target.result);
   reader.readAsDataURL(f);
   input.value = '';
 }
@@ -970,6 +960,118 @@ function removeBackground(src, cb) {
   };
   img.onerror = () => cb(src);
   img.src = src;
+}
+
+/* ===== SPLINE LASSO STICKER CUTOUT =====
+   Tap points around what you want to keep; a smooth closed spline forms the
+   boundary and everything OUTSIDE it is cut away (made transparent). */
+let _splineImg = null, _splinePts = [];
+function openSplineCutout(src) {
+  _splinePts = [];
+  const img = new Image();
+  img.onload = () => {
+    _splineImg = img;
+    const cv = document.getElementById('splineCanvas');
+    const maxW = Math.min(330, (window.innerWidth || 360) - 64), maxH = 360;
+    const s = Math.min(maxW / img.width, maxH / img.height, 1);
+    cv.width = Math.max(1, Math.round(img.width * s));
+    cv.height = Math.max(1, Math.round(img.height * s));
+    drawSpline();
+    updateSplineHint();
+    document.getElementById('splineModal').classList.add('open');
+  };
+  img.onerror = () => toast('Could not load that image');
+  img.src = src;
+}
+function _splinePoint(e) {
+  const cv = document.getElementById('splineCanvas');
+  const rect = cv.getBoundingClientRect();
+  const t = (e.touches && e.touches[0]) || (e.changedTouches && e.changedTouches[0]) || e;
+  return { x: (t.clientX - rect.left) * (cv.width / rect.width), y: (t.clientY - rect.top) * (cv.height / rect.height) };
+}
+function splineAddPoint(e) {
+  if (e) e.preventDefault();
+  if (!_splineImg) return;
+  _splinePts.push(_splinePoint(e));
+  drawSpline();
+  updateSplineHint();
+}
+function updateSplineHint() {
+  const h = document.getElementById('splineHint');
+  if (!h) return;
+  const need = 3 - _splinePts.length;
+  h.textContent = need > 0
+    ? `Tap around the part to keep — ${need} more point${need === 1 ? '' : 's'}`
+    : `${_splinePts.length} points · tap “Cut Out” when it looks right`;
+}
+/* closed Catmull-Rom spline through the points */
+function tracePath(ctx, pts) {
+  const n = pts.length;
+  if (n < 2) return;
+  ctx.beginPath();
+  ctx.moveTo(pts[0].x, pts[0].y);
+  if (n === 2) { ctx.lineTo(pts[1].x, pts[1].y); ctx.closePath(); return; }
+  for (let i = 0; i < n; i++) {
+    const p0 = pts[(i - 1 + n) % n], p1 = pts[i], p2 = pts[(i + 1) % n], p3 = pts[(i + 2) % n];
+    const c1x = p1.x + (p2.x - p0.x) / 6, c1y = p1.y + (p2.y - p0.y) / 6;
+    const c2x = p2.x - (p3.x - p1.x) / 6, c2y = p2.y - (p3.y - p1.y) / 6;
+    ctx.bezierCurveTo(c1x, c1y, c2x, c2y, p2.x, p2.y);
+  }
+  ctx.closePath();
+}
+function drawSpline() {
+  const cv = document.getElementById('splineCanvas');
+  if (!cv || !_splineImg) return;
+  const ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.drawImage(_splineImg, 0, 0, cv.width, cv.height);
+  if (!_splinePts.length) return;
+  if (_splinePts.length >= 3) {
+    // dim everything OUTSIDE the shape (even-odd: spline subpath + full-canvas subpath)
+    tracePath(ctx, _splinePts);
+    ctx.rect(0, 0, cv.width, cv.height);
+    ctx.fillStyle = 'rgba(0,0,0,0.5)';
+    ctx.fill('evenodd');
+    // boundary outline
+    tracePath(ctx, _splinePts);
+    ctx.strokeStyle = '#4dc7ff'; ctx.lineWidth = 2; ctx.setLineDash([6, 4]); ctx.stroke();
+    ctx.setLineDash([]);
+  }
+  _splinePts.forEach((p, i) => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, i === 0 ? 6 : 4.5, 0, Math.PI * 2);
+    ctx.fillStyle = i === 0 ? '#fff' : '#4dc7ff';
+    ctx.fill();
+    ctx.lineWidth = 2; ctx.strokeStyle = '#4dc7ff'; ctx.stroke();
+  });
+}
+function undoSplinePoint() { _splinePts.pop(); drawSpline(); updateSplineHint(); }
+function resetSpline() { _splinePts = []; drawSpline(); updateSplineHint(); }
+function closeSplineCutout() { closeSheetAnimated('splineModal'); }
+function applySplineCutout() {
+  if (_splinePts.length < 3) { toast('Tap at least 3 points around what to keep'); return; }
+  const cv = document.getElementById('splineCanvas');
+  let minX = 1e9, minY = 1e9, maxX = -1e9, maxY = -1e9;
+  _splinePts.forEach(p => { minX = Math.min(minX, p.x); minY = Math.min(minY, p.y); maxX = Math.max(maxX, p.x); maxY = Math.max(maxY, p.y); });
+  const pad = 4;
+  minX = Math.max(0, minX - pad); minY = Math.max(0, minY - pad);
+  maxX = Math.min(cv.width, maxX + pad); maxY = Math.min(cv.height, maxY + pad);
+  const ow = Math.max(1, Math.round(maxX - minX)), oh = Math.max(1, Math.round(maxY - minY));
+  const out = document.createElement('canvas'); out.width = ow; out.height = oh;
+  const octx = out.getContext('2d');
+  octx.save();
+  octx.translate(-minX, -minY);
+  tracePath(octx, _splinePts);
+  octx.clip();
+  octx.drawImage(_splineImg, 0, 0, cv.width, cv.height);
+  octx.restore();
+  let url; try { url = out.toDataURL('image/png'); } catch (e) { toast('Could not cut out that image'); return; }
+  const custom = STICKER_PACKS.find(p => p.id === 'custom');
+  custom.stickers.push({ img: url });
+  closeSplineCutout();
+  renderStickerTabs();
+  selectStickerPack('custom', null);
+  toast('Sticker created ✂️');
 }
 
 /* ===== PHOTOS — library picker + album ===== */
