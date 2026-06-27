@@ -1,5 +1,5 @@
 /* BLUSHIFT service worker — offline app shell so it installs & runs like a native app */
-const CACHE = 'blushift-beta-v1';
+const CACHE = 'blushift-beta-v3';
 const ASSETS = [
   './',
   './index.html',
@@ -40,19 +40,18 @@ self.addEventListener('fetch', (e) => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  // network-first for cross-origin (fonts, APIs); cache-first for our own shell
+  // only manage our own origin; fonts/flags/emoji go straight to the network
   if (url.origin !== location.origin) return;
+  // NETWORK-FIRST: always try the live file so updates (code, icons) show immediately;
+  // fall back to cache only when offline. (Cache-first previously pinned stale assets.)
   e.respondWith((async () => {
-    const cached = await caches.match(req);
-    if (cached) return cached;
     try {
       const res = await fetch(req);
       if (res && res.ok) { const copy = res.clone(); caches.open(CACHE).then((c) => c.put(req, copy)); }
       return res;
     } catch (err) {
-      // offline fallback to the app shell
-      const shell = await caches.match('./BLUSHIFT Beta V1.html');
-      return shell || Response.error();
+      const cached = await caches.match(req);
+      return cached || (await caches.match('./BLUSHIFT Beta V1.html')) || Response.error();
     }
   })());
 });

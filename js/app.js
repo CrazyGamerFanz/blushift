@@ -140,7 +140,37 @@ function setEmojiPack(id) { applyEmojiPack(id); renderSettings(); refreshTapback
    proprietary & not on Windows), so render those packs as images from a
    style-aware CDN. Native uses the system emoji font. */
 function emojiStyleName() {
-  return { native: null, microsoft: 'microsoft', apple: 'apple', whatsapp: 'whatsapp' }[currentEmojiPack] || null;
+  // emojicdn dropped 'microsoft' + 'whatsapp' (they 400 now). On Windows the system
+  // font IS Microsoft, so 'microsoft' -> null (system). 'whatsapp' is handled specially
+  // via emojigraph in EM(). 'apple' still works on emojicdn.
+  return { native: null, microsoft: null, apple: 'apple', whatsapp: 'whatsapp' }[currentEmojiPack] || null;
+}
+/* WhatsApp emoji images come from emojigraph, addressed by <cldr-slug>_<codepoints> */
+let EMOJI_SLUGS = null, _slugsLoading = false;
+function loadEmojiSlugs() {
+  if (EMOJI_SLUGS || _slugsLoading) return;
+  _slugsLoading = true;
+  fetch('https://cdn.jsdelivr.net/npm/unicode-emoji-json/data-by-emoji.json')
+    .then(r => r.json())
+    .then(d => {
+      EMOJI_SLUGS = {};
+      for (const k in d) { if (d[k] && d[k].slug) EMOJI_SLUGS[k] = d[k].slug.replace(/_/g, '-'); }
+      // re-render now that WhatsApp images can resolve
+      if (currentEmojiPack === 'whatsapp') {
+        if (activeChat !== null) { const m = getActiveMessages(); if (m) renderMessages(m); }
+        const sv = document.getElementById('viewSettings'); if (sv && sv.classList.contains('active')) renderSettings();
+      }
+    })
+    .catch(() => { EMOJI_SLUGS = {}; });
+}
+function emojiImgUrl(m, style) {
+  if (style === 'whatsapp') {
+    const slug = EMOJI_SLUGS && EMOJI_SLUGS[m];
+    if (!slug) return null;                       // unknown -> caller keeps the system glyph
+    const cps = [...m].map(c => c.codePointAt(0).toString(16)).join('-');
+    return `https://emojigraph.org/media/whatsapp/${slug}_${cps}.png`;
+  }
+  return `https://emojicdn.elk.sh/${encodeURIComponent(m)}?style=${style}`;
 }
 const EMOJI_RE = /(\p{RI}\p{RI})|(\p{Extended_Pictographic}(️|‍\p{Extended_Pictographic}|[\u{1F3FB}-\u{1F3FF}])*)|([\d#*]️?⃣)/gu;
 function EM(str) {
@@ -148,8 +178,10 @@ function EM(str) {
   const style = emojiStyleName();
   str = String(str);
   if (!style) return str;
+  if (style === 'whatsapp') loadEmojiSlugs();
   return str.replace(EMOJI_RE, (m) => {
-    const url = `https://emojicdn.elk.sh/${encodeURIComponent(m)}?style=${style}`;
+    const url = emojiImgUrl(m, style);
+    if (!url) return m;                            // WhatsApp glyph not mapped yet -> system emoji
     // if the CDN can't serve that glyph/style, fall back to the system emoji
     return `<img class="emoji-img" src="${url}" alt="${m}" draggable="false" onerror="this.outerHTML=this.alt">`;
   });
