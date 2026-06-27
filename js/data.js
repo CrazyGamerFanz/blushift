@@ -334,29 +334,34 @@ const LANGUAGES = Object.entries(TRANSLATIONS).map(([code, l]) => ({ code, name:
 
 /* ===== App-wide language picker (shown after boot) ===== */
 const APP_LANGUAGES = [
-  { code:'en', name:'English',    native:'English',           flag:'🇺🇸' },
-  { code:'es', name:'Spanish',    native:'Español',           flag:'🇪🇸' },
-  { code:'fr', name:'French',     native:'Français',          flag:'🇫🇷' },
-  { code:'de', name:'German',     native:'Deutsch',           flag:'🇩🇪' },
-  { code:'pt', name:'Portuguese', native:'Português',         flag:'🇧🇷' },
-  { code:'it', name:'Italian',    native:'Italiano',          flag:'🇮🇹' },
-  { code:'ru', name:'Russian',    native:'Русский',           flag:'🇷🇺' },
-  { code:'ja', name:'Japanese',   native:'日本語',             flag:'🇯🇵' },
-  { code:'ko', name:'Korean',     native:'한국어',             flag:'🇰🇷' },
-  { code:'zh', name:'Chinese',    native:'中文',               flag:'🇨🇳' },
-  { code:'ar', name:'Arabic',     native:'العربية',           flag:'🇸🇦' },
-  { code:'hi', name:'Hindi',      native:'हिन्दी',             flag:'🇮🇳' },
-  { code:'nl', name:'Dutch',      native:'Nederlands',        flag:'🇳🇱' },
-  { code:'pl', name:'Polish',     native:'Polski',            flag:'🇵🇱' },
-  { code:'tr', name:'Turkish',    native:'Türkçe',            flag:'🇹🇷' },
-  { code:'vi', name:'Vietnamese', native:'Tiếng Việt',        flag:'🇻🇳' },
-  { code:'th', name:'Thai',       native:'ไทย',               flag:'🇹🇭' },
-  { code:'id', name:'Indonesian', native:'Bahasa Indonesia',  flag:'🇮🇩' },
-  { code:'sv', name:'Swedish',    native:'Svenska',           flag:'🇸🇪' },
-  { code:'el', name:'Greek',      native:'Ελληνικά',          flag:'🇬🇷' },
-  { code:'he', name:'Hebrew',     native:'עברית',             flag:'🇮🇱' },
-  { code:'uk', name:'Ukrainian',  native:'Українська',        flag:'🇺🇦' },
-  { code:'fa', name:'Persian',    native:'فارسی',             flag:'🇮🇷' },
-  { code:'ur', name:'Urdu',       native:'اردو',              flag:'🇵🇰' },
+  { code:'en', name:'English',    native:'English',           cc:'us' },
+  { code:'es', name:'Spanish',    native:'Español',           cc:'es' },
+  { code:'fr', name:'French',     native:'Français',          cc:'fr' },
+  { code:'de', name:'German',     native:'Deutsch',           cc:'de' },
+  { code:'pt', name:'Portuguese', native:'Português',         cc:'br' },
+  { code:'it', name:'Italian',    native:'Italiano',          cc:'it' },
+  { code:'ru', name:'Russian',    native:'Русский',           cc:'ru' },
+  { code:'ja', name:'Japanese',   native:'日本語',             cc:'jp' },
+  { code:'ko', name:'Korean',     native:'한국어',             cc:'kr' },
+  { code:'zh', name:'Chinese',    native:'中文',               cc:'cn' },
+  { code:'ar', name:'Arabic',     native:'العربية',           cc:'sa' },
+  { code:'hi', name:'Hindi',      native:'हिन्दी',             cc:'in' },
+  { code:'nl', name:'Dutch',      native:'Nederlands',        cc:'nl' },
+  { code:'pl', name:'Polish',     native:'Polski',            cc:'pl' },
+  { code:'tr', name:'Turkish',    native:'Türkçe',            cc:'tr' },
+  { code:'vi', name:'Vietnamese', native:'Tiếng Việt',        cc:'vn' },
+  { code:'th', name:'Thai',       native:'ไทย',               cc:'th' },
+  { code:'id', name:'Indonesian', native:'Bahasa Indonesia',  cc:'id' },
+  { code:'sv', name:'Swedish',    native:'Svenska',           cc:'se' },
+  { code:'el', name:'Greek',      native:'Ελληνικά',          cc:'gr' },
+  { code:'he', name:'Hebrew',     native:'עברית',             cc:'il' },
+  { code:'uk', name:'Ukrainian',  native:'Українська',        cc:'ua' },
+  { code:'fa', name:'Persian',    native:'فارسی',             cc:'ir' },
+  { code:'ur', name:'Urdu',       native:'اردو',              cc:'pk' },
 ];
+/* real flag image (Windows shows flag EMOJI as plain "US"/"DE" text, so use images) */
+function flagImg(cc) {
+  if (!cc) return '';
+  return `<img class="lang-flag-img" src="https://flagcdn.com/32x24/${cc}.png" srcset="https://flagcdn.com/64x48/${cc}.png 2x" width="28" height="21" alt="" loading="lazy" onerror="this.style.display='none'">`;
+}
 const RTL_LANGS = ['ar','he','fa','ur'];

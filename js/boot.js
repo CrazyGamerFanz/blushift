@@ -60,7 +60,7 @@ function renderLangSelect(q) {
   const matches = APP_LANGUAGES.filter(l => !ql || l.name.toLowerCase().includes(ql) || l.native.toLowerCase().includes(ql) || l.code === ql);
   list.innerHTML = matches.length
     ? matches.map(l => `<button class="lang-row ${appLang === l.code ? 'sel' : ''}" onclick="chooseAppLanguage('${l.code}')">
-        <span class="lang-flag">${l.flag}</span>
+        <span class="lang-flag">${flagImg(l.cc)}</span>
         <span class="lang-names"><span class="lang-native">${l.native}</span><span class="lang-en">${l.name}</span></span>
         ${appLang === l.code ? '<span class="lang-check">✓</span>' : ''}
       </button>`).join('')

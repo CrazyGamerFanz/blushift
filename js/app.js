@@ -1273,7 +1273,7 @@ function renderAppLangPicker(q) {
   const list = document.getElementById('appLangList'); if (!list) return;
   const ql = (q || '').toLowerCase().trim();
   const matches = APP_LANGUAGES.filter(l => !ql || l.name.toLowerCase().includes(ql) || l.native.toLowerCase().includes(ql));
-  list.innerHTML = matches.length ? matches.map(l => `<button class="lang-row ${appLang===l.code?'sel':''}" onclick="pickAppLanguage('${l.code}')"><span class="lang-flag">${l.flag}</span><span class="lang-names"><span class="lang-native">${l.native}</span><span class="lang-en">${l.name}</span></span>${appLang===l.code?'<span class="lang-check">✓</span>':''}</button>`).join('') : '<div class="lang-empty">No language found</div>';
+  list.innerHTML = matches.length ? matches.map(l => `<button class="lang-row ${appLang===l.code?'sel':''}" onclick="pickAppLanguage('${l.code}')"><span class="lang-flag">${flagImg(l.cc)}</span><span class="lang-names"><span class="lang-native">${l.native}</span><span class="lang-en">${l.name}</span></span>${appLang===l.code?'<span class="lang-check">✓</span>':''}</button>`).join('') : '<div class="lang-empty">No language found</div>';
 }
 function pickAppLanguage(code) {
   setAppLanguage(code);
@@ -2351,7 +2351,7 @@ function renderSettings() {
       <div class="settings-section-title"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg> MESSAGING</div>
       <div class="settings-item"><span>Read Receipts (with time)</span><label class="toggle"><input type="checkbox" ${readReceiptsOn?'checked':''} onchange="setReadReceipts(this.checked)"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
       <div class="settings-item"><span>Auto-Translate Foreign Messages</span><label class="toggle"><input type="checkbox" ${autoTranslateOn?'checked':''} onchange="setAutoTranslate(this.checked)"><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
-      <div class="settings-item" onclick="openLanguagePicker()" style="cursor:pointer"><span>App Language</span><span class="settings-val">${(APP_LANGUAGES.find(l=>l.code===appLang)||{native:'English',flag:'🇺🇸'}).flag} ${(APP_LANGUAGES.find(l=>l.code===appLang)||{native:'English'}).native} ▸</span></div>
+      <div class="settings-item" onclick="openLanguagePicker()" style="cursor:pointer"><span>App Language</span><span class="settings-val" style="display:inline-flex;align-items:center;gap:6px">${flagImg((APP_LANGUAGES.find(l=>l.code===appLang)||{cc:'us'}).cc)} ${(APP_LANGUAGES.find(l=>l.code===appLang)||{native:'English'}).native} ▸</span></div>
       <div class="settings-item"><span>Typing Indicators</span><label class="toggle"><input type="checkbox" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
       <div class="settings-item"><span>HD Media Bridge</span><label class="toggle"><input type="checkbox" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
       <div class="settings-item"><span>Instant Translation</span><label class="toggle"><input type="checkbox" checked><span class="toggle-track"><span class="toggle-thumb"></span></span></label></div>
