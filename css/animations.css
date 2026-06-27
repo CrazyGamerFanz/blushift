@@ -1,0 +1,637 @@
+/* ============================================
+   BLUSHIFT Beta — Boot Screen & Animations
+   ============================================ */
+
+/* ===== BOOT SCREEN ===== */
+.boot-screen, .screen {
+  position: fixed; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  z-index: 20000;
+}
+.boot-screen { background: #000; }
+
+.boot-bg {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.boot-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,240,255,0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,240,255,0.05) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: grid-scroll 20s linear infinite;
+  mask-image: radial-gradient(ellipse at center, black 20%, transparent 70%);
+}
+@keyframes grid-scroll {
+  0% { transform: translate(0,0); }
+  100% { transform: translate(40px,40px); }
+}
+
+.boot-glow {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  animation: glow-drift 6s ease-in-out infinite;
+}
+.boot-glow-1 {
+  width: 300px; height: 300px;
+  background: rgba(0,240,255,0.2);
+  top: 10%; left: 20%;
+}
+.boot-glow-2 {
+  width: 250px; height: 250px;
+  background: rgba(255,43,214,0.2);
+  bottom: 20%; right: 15%;
+  animation-delay: -3s;
+}
+@keyframes glow-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  33% { transform: translate(30px,-20px) scale(1.1); }
+  66% { transform: translate(-20px,30px) scale(0.9); }
+}
+
+.boot-particles {
+  position: absolute; inset: 0;
+  overflow: hidden;
+}
+.boot-particle {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: var(--accent-1, #00f0ff);
+  border-radius: 50%;
+  animation: particle-float linear infinite;
+  opacity: 0;
+}
+@keyframes particle-float {
+  0% { transform: translateY(100vh) scale(0); opacity: 0; }
+  10% { opacity: 0.8; }
+  90% { opacity: 0.3; }
+  100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+}
+
+.boot-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 20px;
+  animation: boot-fade-in 1s ease 0.3s both;
+}
+@keyframes boot-fade-in {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.boot-logo-wrap {
+  position: relative;
+  width: 120px; height: 120px;
+  display: flex; align-items: center; justify-content: center;
+}
+.boot-ring {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+}
+.boot-ring-track {
+  fill: none;
+  stroke: rgba(0,240,255,0.1);
+  stroke-width: 2;
+}
+.boot-ring-fill {
+  fill: none;
+  stroke: var(--accent-1, #00f0ff);
+  stroke-width: 2.5;
+  stroke-dasharray: 565;
+  stroke-dashoffset: 565;
+  stroke-linecap: round;
+  transform-origin: center;
+  transform: rotate(-90deg);
+  filter: drop-shadow(0 0 8px rgba(0,240,255,0.5));
+  animation: ring-fill 3.5s ease-in-out forwards 0.5s;
+}
+@keyframes ring-fill {
+  to { stroke-dashoffset: 0; }
+}
+
+.boot-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 42px;
+  color: var(--accent-1, #00f0ff);
+  text-shadow: 0 0 30px rgba(0,240,255,0.6), 0 0 60px rgba(0,240,255,0.3);
+  animation: logo-pulse 2s ease-in-out infinite;
+}
+@keyframes logo-pulse {
+  0%,100% { text-shadow: 0 0 30px rgba(0,240,255,0.6), 0 0 60px rgba(0,240,255,0.3); }
+  50% { text-shadow: 0 0 50px rgba(0,240,255,0.8), 0 0 100px rgba(0,240,255,0.5); }
+}
+
+.boot-title {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 28px;
+  letter-spacing: 8px;
+  color: #fff;
+  text-shadow: 0 0 20px rgba(0,240,255,0.4);
+  animation: title-glitch 4s ease-in-out infinite;
+}
+@keyframes title-glitch {
+  0%,100% { transform: translate(0); }
+  2% { transform: translate(-2px,1px); }
+  4% { transform: translate(2px,-1px); }
+  6% { transform: translate(0); }
+}
+
+.boot-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(0,240,255,0.5);
+  text-transform: uppercase;
+  animation: subtitle-type 2s steps(35) 1s both;
+  overflow: hidden;
+  white-space: nowrap;
+  border-right: 1px solid rgba(0,240,255,0.5);
+}
+@keyframes subtitle-type {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+.boot-progress {
+  width: 200px; height: 3px;
+  background: rgba(0,240,255,0.1);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+.boot-progress-bar {
+  height: 100%; width: 0%;
+  background: linear-gradient(90deg, var(--accent-1, #00f0ff), var(--accent-2, #ff2bd6));
+  border-radius: 3px;
+  transition: width 0.3s ease;
+  box-shadow: 0 0 10px rgba(0,240,255,0.5);
+}
+
+.boot-status {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 9px; letter-spacing: 2px;
+  color: rgba(0,240,255,0.4);
+  text-transform: uppercase;
+  min-height: 14px;
+}
+
+/* ===== SIGNUP SCREEN ===== */
+.signup-screen {
+  background: #000;
+}
+.signup-bg { position: absolute; inset: 0; overflow: hidden; }
+.signup-content {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 380px;
+  padding: 40px 30px;
+  animation: fade-up 0.6s ease;
+}
+.signup-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 28px;
+  letter-spacing: 6px;
+  color: var(--accent-1, #00f0ff);
+  text-shadow: 0 0 20px rgba(0,240,255,0.5);
+  text-align: center;
+  margin-bottom: 6px;
+}
+.signup-tag {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px; letter-spacing: 3px;
+  color: rgba(255,255,255,0.4);
+  text-align: center;
+  margin-bottom: 28px;
+}
+.signup-form {
+  display: flex; flex-direction: column;
+  gap: 4px;
+}
+.signup-form .form-group input,
+.signup-form .form-group select {
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(0,240,255,0.15);
+}
+.signup-form .form-group input:focus,
+.signup-form .form-group select:focus {
+  border-color: var(--accent-1, #00f0ff);
+  box-shadow: 0 0 12px rgba(0,240,255,0.15);
+}
+
+/* ===== PLAN SCREEN ===== */
+.plan-screen { background: #000; }
+.plan-content {
+  position: relative; z-index: 1;
+  width: 100%; max-width: 420px;
+  padding: 30px 20px;
+  max-height: 100vh; overflow-y: auto;
+  animation: fade-up 0.6s ease;
+}
+.plan-header { text-align: center; margin-bottom: 20px; }
+.plan-note {
+  font-size: 11px; color: rgba(255,255,255,0.3);
+  margin-top: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.5px;
+}
+.plan-cards {
+  display: flex; flex-direction: column; gap: 14px;
+}
+.plan-card {
+  border: 1px solid var(--line, rgba(0,240,255,0.2));
+  border-radius: 16px;
+  padding: 20px;
+  background: rgba(255,255,255,0.02);
+  cursor: pointer;
+  transition: all 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.plan-card:hover {
+  border-color: var(--accent-1, #00f0ff);
+  background: rgba(0,240,255,0.04);
+  transform: scale(1.02);
+}
+.plan-card.recommended {
+  border-color: var(--accent-1, #00f0ff);
+  box-shadow: 0 0 20px rgba(0,240,255,0.15);
+}
+.plan-card.recommended::before {
+  content: "RECOMMENDED";
+  position: absolute; top: 0; right: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8px; letter-spacing: 2px;
+  color: var(--bg-0, #05070d);
+  background: var(--accent-1, #00f0ff);
+  padding: 3px 10px;
+  border-radius: 0 14px 0 8px;
+}
+.plan-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 16px; font-weight: 700;
+  letter-spacing: 3px;
+  color: var(--accent-1, #00f0ff);
+}
+.plan-price {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 32px; font-weight: 900;
+  color: #fff; margin: 8px 0;
+}
+.plan-price .cur { font-size: 16px; color: rgba(255,255,255,0.5); }
+.plan-price .per { font-size: 12px; color: rgba(255,255,255,0.3); font-family: 'Inter', sans-serif; }
+.plan-price .free-tag {
+  font-size: 11px;
+  color: var(--ok, #4dffa1);
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 2px;
+  display: block; margin-top: 2px;
+}
+.plan-features { list-style: none; margin-top: 12px; }
+.plan-features li {
+  padding: 4px 0;
+  font-size: 12px; color: rgba(255,255,255,0.6);
+}
+.plan-features li::before { content: "▸ "; color: var(--accent-2, #ff2bd6); }
+
+/* ===== TRANSITION SCREEN ===== */
+.transition-screen { background: #000; z-index: 20001; }
+.transition-content {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 20px;
+  animation: fade-up 0.6s ease;
+}
+.transition-check {
+  width: 80px; height: 80px;
+}
+.transition-check svg { width: 100%; height: 100%; }
+.transition-check-mark {
+  stroke-dasharray: 50;
+  stroke-dashoffset: 50;
+  animation: check-draw 0.6s ease 0.3s forwards;
+}
+@keyframes check-draw {
+  to { stroke-dashoffset: 0; }
+}
+.transition-text {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 20px; font-weight: 700;
+  letter-spacing: 5px;
+  color: var(--accent-1, #00f0ff);
+  text-shadow: 0 0 20px rgba(0,240,255,0.5);
+}
+.transition-sub {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px; letter-spacing: 2px;
+  color: rgba(255,255,255,0.4);
+}
+
+/* ===== BUTTON ANIMATIONS ===== */
+.anim-btn {
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+.anim-btn:active {
+  transform: scale(0.92) !important;
+}
+.anim-btn:hover {
+  transform: scale(1.05);
+}
+
+/* Nav button bounce on click */
+.nav-btn.bounce {
+  animation: nav-bounce 0.4s ease;
+}
+@keyframes nav-bounce {
+  0% { transform: scale(1); }
+  30% { transform: scale(0.85); }
+  60% { transform: scale(1.08); }
+  100% { transform: scale(1); }
+}
+
+/* Message send animation */
+.msg-row.sending {
+  animation: msg-send 0.35s ease;
+}
+@keyframes msg-send {
+  0% { transform: translateY(20px); opacity: 0; }
+  60% { transform: translateY(-3px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Chat item slide in */
+.chat-item.slide-in {
+  animation: chat-slide 0.3s ease;
+}
+@keyframes chat-slide {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* View transitions */
+.view-enter {
+  animation: view-slide-in 0.3s ease;
+}
+@keyframes view-slide-in {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+.view-enter-back {
+  animation: view-slide-back 0.3s ease;
+}
+@keyframes view-slide-back {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* Swipe hint */
+.swipe-hint {
+  position: absolute;
+  left: -44px; top: 50%;
+  transform: translateY(-50%) scale(0.7);
+  color: var(--accent-1);
+  font-size: 15px;
+  opacity: 0;
+  transition: opacity 0.2s, left 0.2s, transform 0.2s;
+  pointer-events: none;
+}
+.msg-row.swiping .swipe-hint {
+  opacity: 1;
+  left: -38px;
+  transform: translateY(-50%) scale(2.5);   /* reply icon grows ~2.5x as you drag it out */
+}
+
+/* Generic animations */
+@keyframes fade-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Boot screen fade out */
+.boot-screen.exiting {
+  animation: boot-exit 0.8s ease forwards;
+}
+@keyframes boot-exit {
+  0% { opacity: 1; }
+  50% { opacity: 1; transform: scale(1.05); }
+  100% { opacity: 0; transform: scale(1.2); }
+}
+
+.screen.entering { animation: fade-up 0.5s ease; }
+.screen.exiting { animation: screen-exit 0.4s ease forwards; }
+@keyframes screen-exit {
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+/* ============================================
+   v0.4 — NICER LOGIN / BOOT SCREEN
+   ============================================ */
+.boot-content { gap: 22px; }
+.boot-logo-wrap { width: 132px; height: 132px; }
+.boot-logo { font-size: 46px; }
+.boot-title { font-size: 30px; letter-spacing: 10px; }
+
+/* Aurora sweep behind boot/login */
+.boot-bg::after, .signup-bg::after {
+  content: "";
+  position: absolute; inset: -20%;
+  background:
+    radial-gradient(closest-side at 30% 30%, rgba(0,240,255,0.10), transparent 70%),
+    radial-gradient(closest-side at 70% 60%, rgba(255,43,214,0.10), transparent 70%);
+  animation: aurora-drift 14s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes aurora-drift {
+  0% { transform: translate(0,0) scale(1); }
+  100% { transform: translate(4%, -3%) scale(1.1); }
+}
+
+/* Glass login card */
+.signup-content {
+  background: rgba(12,16,28,0.55);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 24px;
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.55), inset 0 1px 0 rgba(255,255,255,0.06);
+  animation: card-rise 0.6s cubic-bezier(0.2,0.9,0.25,1);
+}
+@keyframes card-rise {
+  from { opacity: 0; transform: translateY(30px) scale(0.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.signup-logo {
+  font-size: 30px; letter-spacing: 7px;
+  background: linear-gradient(135deg, var(--accent-1,#00f0ff), var(--accent-2,#ff2bd6));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 18px rgba(0,240,255,0.4));
+}
+.signup-form .form-group input {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 12px;
+  transition: all 0.2s;
+}
+.signup-form .form-group input:focus {
+  border-color: var(--accent-1,#00f0ff);
+  box-shadow: 0 0 0 3px rgba(0,240,255,0.12);
+  background: rgba(255,255,255,0.07);
+}
+.signup-form .btn-primary {
+  margin-top: 6px; padding: 14px;
+  box-shadow: 0 8px 24px rgba(0,240,255,0.25);
+}
+
+/* Plan cards lift */
+.plan-card { backdrop-filter: blur(8px); }
+
+/* ============================================
+   v0.4 — BIOMETRIC LOCK SCREEN
+   ============================================ */
+.biometric-screen { background: #000; }
+.bio-content {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column;
+  align-items: center; gap: 16px;
+  animation: card-rise 0.5s ease;
+}
+.bio-logo {
+  font-family: 'Orbitron', sans-serif;
+  font-weight: 900; font-size: 22px; letter-spacing: 6px;
+  background: linear-gradient(135deg, var(--accent-1,#00f0ff), var(--accent-2,#ff2bd6));
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-bottom: 10px;
+}
+.bio-ring {
+  position: relative;
+  width: 150px; height: 150px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--accent-1, #00f0ff);
+}
+.bio-ring-svg { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); }
+.bio-ring-track { fill: none; stroke: rgba(255,255,255,0.08); stroke-width: 3; }
+.bio-ring-prog {
+  fill: none; stroke: var(--accent-1, #00f0ff); stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 289; stroke-dashoffset: 289;
+  filter: drop-shadow(0 0 6px var(--accent-1-glow, rgba(0,240,255,0.5)));
+}
+.bio-face {
+  color: var(--accent-1, #00f0ff);
+  filter: drop-shadow(0 0 10px var(--accent-1-glow, rgba(0,240,255,0.5)));
+  animation: bio-breathe 2.4s ease-in-out infinite;
+}
+@keyframes bio-breathe {
+  0%,100% { opacity: 0.7; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.06); }
+}
+.bio-ring.scanning .bio-ring-prog { animation: bio-fill 1.3s ease forwards; }
+.bio-ring.scanning .bio-face { animation: bio-scan 1.3s ease forwards; }
+@keyframes bio-fill { to { stroke-dashoffset: 0; } }
+@keyframes bio-scan {
+  0% { color: var(--accent-1,#00f0ff); }
+  100% { color: var(--ok,#4dffa1); transform: scale(1.1); }
+}
+.bio-ring::after {
+  content: ""; position: absolute;
+  left: 12%; right: 12%; height: 2px; top: 18%;
+  background: linear-gradient(90deg, transparent, var(--accent-1,#00f0ff), transparent);
+  opacity: 0; border-radius: 2px;
+}
+.bio-ring.scanning::after { animation: bio-scanline 1.3s ease; }
+@keyframes bio-scanline {
+  0% { top: 18%; opacity: 0; }
+  20% { opacity: 1; }
+  80% { opacity: 1; }
+  100% { top: 82%; opacity: 0; }
+}
+.bio-name { font-family: 'Orbitron', sans-serif; font-size: 16px; color: var(--txt-bright, #fff); letter-spacing: 1px; }
+.bio-status { font-family: 'JetBrains Mono', monospace; font-size: 12px; letter-spacing: 1px; color: var(--accent-1, #00f0ff); transition: color 0.3s; }
+.bio-hint { font-family: 'JetBrains Mono', monospace; font-size: 9px; letter-spacing: 2px; color: rgba(255,255,255,0.3); text-transform: uppercase; }
+
+/* ============================================================
+   v0.5 — STYLIZED ANIMATIONS EVERYWHERE (boot untouched)
+   These re-declarations override the earlier, plainer versions.
+   ============================================================ */
+
+/* Springier button feedback */
+.anim-btn { transition: transform 0.18s cubic-bezier(0.2,1.3,0.4,1), box-shadow 0.18s ease, background 0.18s ease; }
+.anim-btn:active { transform: scale(0.88) !important; }
+.anim-btn:hover { transform: scale(1.06); }
+
+/* View transitions — slide + scale spring */
+.view-enter { animation: view-slide-in 0.42s cubic-bezier(0.22,1.0,0.3,1); }
+.view-enter-back { animation: view-slide-back 0.42s cubic-bezier(0.22,1.0,0.3,1); }
+@keyframes view-slide-in {
+  0% { transform: translateX(34px) scale(0.98); opacity: 0; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+@keyframes view-slide-back {
+  0% { transform: translateX(-34px) scale(0.98); opacity: 0; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+/* Nav bounce — punchier */
+@keyframes nav-bounce {
+  0% { transform: scale(1) translateY(0); }
+  30% { transform: scale(0.8) translateY(2px); }
+  55% { transform: scale(1.15) translateY(-3px); }
+  75% { transform: scale(0.96) translateY(0); }
+  100% { transform: scale(1); }
+}
+
+/* Message send — pop up with overshoot */
+.msg-row.sending { animation: msg-send 0.42s cubic-bezier(0.2,1.4,0.35,1); }
+@keyframes msg-send {
+  0% { transform: translateY(26px) scale(0.9); opacity: 0; }
+  60% { transform: translateY(-4px) scale(1.02); opacity: 1; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* Chat-list item entrance */
+@keyframes chat-slide {
+  0% { transform: translateX(-22px) scale(0.97); opacity: 0; }
+  100% { transform: translateX(0) scale(1); opacity: 1; }
+}
+
+/* Modal sheets — rise with slight overshoot (overrides app.css slide-up) */
+@keyframes slide-up {
+  0% { transform: translateY(100%); opacity: 0; }
+  72% { transform: translateY(-6px); opacity: 1; }
+  100% { transform: translateY(0); opacity: 1; }
+}
+
+/* Tapback bar — pop the emoji row in */
+.tapback-bar button { transition: transform 0.15s cubic-bezier(0.2,1.4,0.4,1), background 0.15s; }
+.tapback-bar button:hover { transform: scale(1.25) translateY(-2px); }
+.tapback-bar button:active { transform: scale(0.85); }
+
+/* FAB — idle float + press */
+.fab-primary { animation: fab-float 3.5s ease-in-out infinite; }
+@keyframes fab-float {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-4px); }
+}
+.fab:active { transform: scale(0.9) !important; }
+
+/* Toggle thumb — little bounce when switching */
+.toggle input:checked ~ .toggle-track .toggle-thumb { transition: all 0.3s cubic-bezier(0.2,1.5,0.4,1); }
+
+/* Filter tabs / settings rows — subtle lift on hover */
+.filter-tab { transition: all 0.2s cubic-bezier(0.2,1.2,0.4,1); }
+.filter-tab:hover { transform: translateY(-1px); }
+.settings-item { transition: background 0.18s ease, transform 0.18s ease; }
+
+/* Send button — pulse on hover */
+.compose-send:hover { transform: scale(1.12) rotate(8deg); }
+
+/* Poll bar fill shimmer already animates width; add option press */
+.poll-option:active { transform: scale(0.98); }
+
+/* Generic gentle entrance used by modals' inner content */
+@keyframes soft-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }

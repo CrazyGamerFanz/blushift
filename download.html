@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Get BLUSHIFT — Install the App</title>
+<link rel="manifest" href="manifest.webmanifest" />
+<meta name="theme-color" content="#0a0e1a" />
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+<style>
+  :root { --accent:#4dc7ff; --bg:#0a0e1a; --bg2:#121d34; --txt:#eaf0ff; --dim:#9fb0d6; --line:rgba(120,160,255,.2); }
+  * { box-sizing: border-box; }
+  body { margin:0; min-height:100vh; background:radial-gradient(1200px 600px at 50% -10%, #16243f, var(--bg)); color:var(--txt); font-family:'Inter',system-ui,-apple-system,sans-serif; display:flex; align-items:center; justify-content:center; padding:28px 18px; }
+  .wrap { width:100%; max-width:440px; text-align:center; }
+  .logo { width:120px; height:120px; border-radius:28px; box-shadow:0 18px 50px rgba(0,0,0,.5),0 0 0 1px var(--line); }
+  h1 { font-family:'Orbitron',sans-serif; letter-spacing:2px; font-size:26px; margin:20px 0 4px; }
+  .tag { color:var(--dim); font-size:13px; margin-bottom:24px; }
+  .card { background:rgba(18,29,52,.7); border:1px solid var(--line); border-radius:18px; padding:18px; margin-bottom:14px; text-align:left; backdrop-filter:blur(10px); }
+  .card h2 { font-size:15px; margin:0 0 6px; display:flex; align-items:center; gap:8px; }
+  .card p { font-size:13px; color:var(--dim); line-height:1.55; margin:0 0 12px; }
+  .btn { display:block; width:100%; text-align:center; text-decoration:none; padding:14px; border-radius:13px; font-weight:700; font-size:14.5px; border:none; cursor:pointer; font-family:inherit; }
+  .btn-primary { background:linear-gradient(135deg,#3d7bff,#7b53ff); color:#fff; }
+  .btn-apk { background:linear-gradient(135deg,#1ed760,#119c44); color:#04210f; }
+  .btn-ghost { background:rgba(255,255,255,.06); color:var(--txt); border:1px solid var(--line); margin-top:8px; }
+  .step { font-size:12.5px; color:var(--dim); line-height:1.7; margin-top:8px; }
+  .step b { color:var(--txt); }
+  .badge { display:inline-block; font-size:10px; letter-spacing:1px; background:rgba(77,199,255,.14); color:var(--accent); padding:3px 8px; border-radius:20px; margin-left:6px; }
+  .foot { font-size:11px; color:#6c7ba0; margin-top:14px; line-height:1.5; }
+  code { background:rgba(255,255,255,.07); padding:1px 5px; border-radius:5px; font-size:12px; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <img class="logo" src="icons/icon-512.png" alt="BLUSHIFT" />
+    <h1>BLUSHIFT</h1>
+    <div class="tag">Install the full-screen app on your phone</div>
+
+    <div class="card">
+      <h2>📲 Install instantly <span class="badge">RECOMMENDED</span></h2>
+      <p>Adds BLUSHIFT to your home screen and runs it full-screen like a native app — works offline, with Face&nbsp;ID&nbsp;/&nbsp;fingerprint.</p>
+      <button class="btn btn-primary" id="installBtn" onclick="doInstall()">Add to Home Screen</button>
+      <a class="btn btn-ghost" href="BLUSHIFT%20Beta%20V1.html">Open the app in browser</a>
+      <div class="step" id="manualSteps" style="display:none">
+        <b>iPhone (Safari):</b> tap the <b>Share</b> icon → <b>Add to Home Screen</b>.<br>
+        <b>Android (Chrome):</b> tap the <b>⋮</b> menu → <b>Install app</b>.
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🤖 Get the Android APK</h2>
+      <p>Generate a real installable <code>.apk</code> from this app using <b>PWABuilder</b> (free, by Microsoft). It packages this exact site into an Android app you can download and sideload.</p>
+      <a class="btn btn-apk" id="apkBtn" href="#" target="_blank" rel="noopener">Build &amp; download .apk →</a>
+      <div class="step">
+        On PWABuilder: press <b>Package&nbsp;For&nbsp;Stores → Android</b>, then <b>Download</b>. Install the <code>.apk</code> on your phone (enable “install from unknown sources” when prompted).
+      </div>
+    </div>
+
+    <div class="foot">
+      Tip: the “Add to Home Screen” option above already gives you a full-screen installed app on both iPhone and Android — the APK is only needed if you specifically want a sideloadable Android package or a Play Store listing.
+    </div>
+  </div>
+
+  <script>
+    // PWABuilder deep link uses wherever this page is hosted
+    document.getElementById('apkBtn').href =
+      'https://www.pwabuilder.com/reportcard?site=' + encodeURIComponent(location.origin + location.pathname.replace(/download\.html$/, ''));
+
+    var deferred = null;
+    window.addEventListener('beforeinstallprompt', function (e) { e.preventDefault(); deferred = e; });
+    function doInstall() {
+      if (deferred) { deferred.prompt(); deferred.userChoice.finally(function(){ deferred = null; }); }
+      else { document.getElementById('manualSteps').style.display = 'block'; }
+    }
+    if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+      navigator.serviceWorker.register('sw.js').catch(function(){});
+    }
+  </script>
+</body>
+</html>

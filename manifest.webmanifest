@@ -1,0 +1,19 @@
+{
+  "name": "BLUSHIFT",
+  "short_name": "BLUSHIFT",
+  "description": "Cross-platform blue-bubble messaging — chats, calls, money and more.",
+  "start_url": "./BLUSHIFT%20Beta%20V1.html",
+  "scope": "./",
+  "id": "blushift-beta-v1",
+  "display": "fullscreen",
+  "display_override": ["fullscreen", "standalone", "minimal-ui"],
+  "orientation": "portrait",
+  "background_color": "#0a0e1a",
+  "theme_color": "#0a0e1a",
+  "categories": ["social", "communication"],
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
