@@ -246,7 +246,15 @@ function saveCard(e) {
 function skipCard() { userAccount.card = null; persistAccount(); showSpotifyConnect(); }
 function showSpotifyConnect() { gotoScreen('cardScreen', 'spotifyScreen'); }
 function connectSpotify() {
-  // open the real sign-in sheet; on success, advance the onboarding
+  // Real Spotify login (OAuth) verifies the actual account on Spotify's own page.
+  // Spotify is the last onboarding step, so persist the (complete) account first;
+  // on return from Spotify the app launches already signed in.
+  if (typeof spotifyConfigured === 'function' && spotifyConfigured()) {
+    if (typeof userAccount !== 'undefined' && userAccount) persistAccount();
+    spotifyLogin();
+    return;
+  }
+  // (fallback only if no Spotify Client ID is configured)
   openConnect('spotify', () => {
     const btn = document.getElementById('spotifyBtn');
     if (btn) { btn.textContent = '✓ Connected'; btn.classList.add('linked'); }
