@@ -12,7 +12,7 @@ window.BLUSHIFT_CONFIG = {
   //       https://blushift-rouge.vercel.app/
   //       https://blushift-rouge.vercel.app/BLUSHIFT%20Beta%20V1.html
   // 3. Copy the app's Client ID into the line below.
-  spotifyClientId: '',
+  spotifyClientId: '4ffacc81b1cd4d4782d0d3562c0c09fd',
 
   // --- Email verification (EmailJS) ---
   // 1. Create a free account at https://www.emailjs.com
