@@ -9,7 +9,8 @@ window.BLUSHIFT_CONFIG = {
   // 2. Add these EXACT Redirect URIs in the app settings:
   //       https://crazygamerfanz.github.io/blushift/
   //       https://crazygamerfanz.github.io/blushift/BLUSHIFT%20Beta%20V1.html
-  //       (and your Vercel URL once it exists, same two paths)
+  //       https://blushift-rouge.vercel.app/
+  //       https://blushift-rouge.vercel.app/BLUSHIFT%20Beta%20V1.html
   // 3. Copy the app's Client ID into the line below.
   spotifyClientId: '',
 
@@ -19,5 +20,5 @@ window.BLUSHIFT_CONFIG = {
   // 3. Create an Email Template with variables {{to_email}} and {{code}} -> note the Template ID
   //    (template body should contain the code, e.g. "Your BLUSHIFT code is {{code}}")
   // 4. Account -> General -> copy your Public Key
-  emailjs: { serviceId: '', templateId: '', publicKey: '' },
+  emailjs: { serviceId: 'service_j60pejk', templateId: 'template_qtkat18', publicKey: 'vWyuKti4SZdmNXbgN' },
 };
